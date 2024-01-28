@@ -82,34 +82,24 @@
 
 # 計算最大連通區域的遮罩像素數(面積)
 # ---
-import csv
-from tool.mask_process import find_max_area
-from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory, check_and_create_directory
-for video_name in list_dirs_in_directory('output/color_mask_only/'):
-    input_dir = f'output/color_mask_only/{video_name}/'
-    output_path = f'output/{video_name}_mask_area.csv'
-    no = 0
-    with open(output_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(['no', 'red', 'green', 'brown', 'total'])
-        for img_name in list_files_in_directory(input_dir+'red/'):
-            no += 1
-            red_mask_area = find_max_area(input_dir + 'red/' + img_name)
-            green_mask_area = find_max_area(input_dir + 'green/' + img_name)
-            brown_mask_area = find_max_area(input_dir + 'brown/' + img_name)
-            total = red_mask_area + green_mask_area + brown_mask_area
-            writer.writerow([no, red_mask_area, green_mask_area, brown_mask_area, total])
-            if no % 100 == 0:
-                print(f"正在計算{video_name}的第{no}張影像")
-print("done.")
-
-# 資料視覺化，三色面積
-# ---
-# from tool.get_final_chart import get_final_chart
-# csv_folder = 'output/final_chart_redmax/'
-# csv_list = ['0_3_0_C0144_mask_area.csv', '0_4_0_C0125_mask_area.csv', '0_5_0_C0104_mask_area.csv', '1_6_0_C0096_mask_area.csv']
-# for csv in csv_list:
-#     csv_path = csv_folder + csv
-#     get_final_chart(csv_path=csv_path, output_folder=csv_folder)
+# import csv
+# from tool.mask_process import find_max_area
+# from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory, check_and_create_directory
+# for video_name in list_dirs_in_directory('output/color_mask_only/'):
+#     input_dir = f'output/color_mask_only/{video_name}/'
+#     output_path = f'output/{video_name}_mask_area.csv'
+#     no = 0
+#     with open(output_path, 'w', newline='') as csvfile:
+#         writer = csv.writer(csvfile)
+#         writer.writerow(['no', 'red', 'green', 'brown', 'total'])
+#         for img_name in list_files_in_directory(input_dir+'red/'):
+#             no += 1
+#             red_mask_area = find_max_area(input_dir + 'red/' + img_name)
+#             green_mask_area = find_max_area(input_dir + 'green/' + img_name)
+#             brown_mask_area = find_max_area(input_dir + 'brown/' + img_name)
+#             total = red_mask_area + green_mask_area + brown_mask_area
+#             writer.writerow([no, red_mask_area, green_mask_area, brown_mask_area, total])
+#             if no % 100 == 0:
+#                 print(f"正在計算{video_name}的第{no}張影像")
 # print("done.")
 
