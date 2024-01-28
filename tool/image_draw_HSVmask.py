@@ -9,7 +9,7 @@ def draw_HSVcolor_mask(image_path, lower, upper, output_folder):
     mask = cv2.inRange(hsv_image, lower, upper)
     result = cv2.bitwise_and(image, image, mask=mask)
 
-    output_path = output_folder + "/" + "mask_" + get_basename(image_path)
+    output_path = output_folder + "/" + "_mask_" + get_basename(image_path)
     cv2.imwrite(output_path, result)
 
 
