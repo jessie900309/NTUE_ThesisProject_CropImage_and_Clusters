@@ -64,20 +64,20 @@
 
 # 取得影像遮罩
 # ---
-# from tool.image_draw_HSVmask import get_HSVcolor_mask
-# from tool.read_directory_files import list_files_in_directory, check_and_create_directory
-# from util.HSV_threshold import *
-# set_color = 'brown'
-# input_dir = 'output/frames_500x500/0_3_0_C0144/'
-# output_dir = 'output/color_mask_only/0_3_0_C0144/'+set_color
-# check_and_create_directory(output_dir)
-# for img_name in list_files_in_directory(input_dir):
-#     loop_count = (list_files_in_directory(input_dir)).index(img_name)
-#     if loop_count % 50 == 0:
-#         print(f"正在輸出第{loop_count}張影像")
-#     img_path = input_dir + img_name
-#     get_HSVcolor_mask(image_path=img_path, lower=lower_brown[0], upper=upper_brown[0], output_folder=output_dir)
-# print("done.")
+from tool.image_draw_HSVmask import get_HSVcolor_mask
+from tool.read_directory_files import list_files_in_directory, check_and_create_directory
+from util.HSV_threshold_sex import *
+set_color = 'brown'
+input_dir = 'output/pick_data_/0_3_0_C0189/'
+output_dir = 'output/color_mask_only/0_3_0_C0189/'+set_color
+check_and_create_directory(output_dir)
+for img_name in list_files_in_directory(input_dir):
+    loop_count = (list_files_in_directory(input_dir)).index(img_name)
+    if loop_count % 50 == 0:
+        print(f"正在輸出第{loop_count}張影像")
+    img_path = input_dir + img_name
+    get_HSVcolor_mask(image_path=img_path, lower=lower_0B[0], upper=upper_0B[0], output_folder=output_dir)
+print("done.")
 
 
 # 尋找最大連通區域的遮罩
