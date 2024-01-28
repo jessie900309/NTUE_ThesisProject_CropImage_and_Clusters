@@ -33,7 +33,8 @@ def erode_and_erosion(mask_path, kernel_x, iteration, output_folder):
 # print("done.")
 
 
-def find_max_area(mask_path, output_folder):
+# def find_max_area(mask_path, output_folder)
+def find_max_area(mask_path):
     image = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
 
     # 二值化，將影像轉為黑白
@@ -47,13 +48,8 @@ def find_max_area(mask_path, output_folder):
     largest_component_mask[labels == largest_label] = 255
     # 忽略黑色背景，只計算白色像素點
     result_image = cv2.bitwise_and(image, image, mask=largest_component_mask)
-
-    new_mask_path = output_folder + get_basename(mask_path)
-    cv2.imwrite(new_mask_path, result_image)
-
-
-def calculate_white_area(mask_path):
-    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-    white_area = cv2.countNonZero(mask)
+    # new_mask_path = output_folder + get_basename(mask_path)
+    # cv2.imwrite(new_mask_path, result_image)
+    white_area = cv2.countNonZero(result_image)
     return white_area
 

@@ -64,61 +64,44 @@
 
 # 取得影像遮罩
 # ---
-from tool.image_draw_HSVmask import get_HSVcolor_mask
-from tool.read_directory_files import list_files_in_directory, check_and_create_directory
-from util.HSV_threshold_sex import *
-set_color = 'brown'
-input_dir = 'output/pick_data_/1_6_0_C0210/'
-output_dir = 'output/color_mask_only/1_6_0_C0210/'+set_color
-check_and_create_directory(output_dir)
-for img_name in list_files_in_directory(input_dir):
-    loop_count = (list_files_in_directory(input_dir)).index(img_name)
-    if loop_count % 50 == 0:
-        print(f"正在輸出第{loop_count}張影像")
-    img_path = input_dir + img_name
-    get_HSVcolor_mask(image_path=img_path, lower=lower_1B[3], upper=upper_1B[3], output_folder=output_dir)
-print("done.")
-
-
-# 尋找最大連通區域的遮罩
-# ---
-# from tool.mask_process import find_max_area
+# from tool.image_draw_HSVmask import get_HSVcolor_mask
 # from tool.read_directory_files import list_files_in_directory, check_and_create_directory
-# input_dir = 'output/color_mask_only/1_6_0_C0096/red/'
-# output_dir = 'output/color_mask_only/1_6_0_C0096/red_max_area/'
+# from util.HSV_threshold_sex import *
+# set_color = 'brown'
+# input_dir = 'output/pick_data_/1_6_0_C0210/'
+# output_dir = 'output/color_mask_only/1_6_0_C0210/'+set_color
 # check_and_create_directory(output_dir)
 # for img_name in list_files_in_directory(input_dir):
-#     loop_count = (list_files_in_directory(input_dir)).index(img_name) + 1
-#     if loop_count % 100 == 0:
+#     loop_count = (list_files_in_directory(input_dir)).index(img_name)
+#     if loop_count % 50 == 0:
 #         print(f"正在輸出第{loop_count}張影像")
 #     img_path = input_dir + img_name
-#     find_max_area(mask_path=img_path, output_folder=output_dir)
+#     get_HSVcolor_mask(image_path=img_path, lower=lower_1B[3], upper=upper_1B[3], output_folder=output_dir)
 # print("done.")
 
 
-# 計算遮罩的像素數(面積)
+# 計算最大連通區域的遮罩像素數(面積)
 # ---
-# from tool.mask_process import calculate_white_area
-# from tool.read_directory_files import list_files_in_directory
-# import csv
-# for video_name in ['0_3_0_C0144', '0_4_0_C0125', '0_5_0_C0104', '1_6_0_C0096']:
-#     input_dir = f'output/color_mask_only/{video_name}/'
-#     output_path = f'output/final_chart_redmax/{video_name}_mask_area.csv'
-#     no = 0
-#     with open(output_path, 'w', newline='') as csvfile:
-#         writer = csv.writer(csvfile)
-#         writer.writerow(['no', 'red', 'green', 'brown', 'total'])
-#         for img_name in list_files_in_directory(input_dir+'red_max_area/'):
-#             no += 1
-#             red_mask_area = calculate_white_area(input_dir + 'red_max_area/' + img_name)
-#             green_mask_area = calculate_white_area(input_dir + 'green/' + img_name)
-#             brown_mask_area = calculate_white_area(input_dir + 'brown/' + img_name)
-#             total = red_mask_area + green_mask_area + brown_mask_area
-#             writer.writerow([no, red_mask_area, green_mask_area, brown_mask_area, total])
-#             if no % 100 == 0:
-#                 print(f"正在計算{video_name}的第{no}張影像")
-# print("done.")
-
+import csv
+from tool.mask_process import find_max_area
+from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory, check_and_create_directory
+for video_name in list_dirs_in_directory('output/color_mask_only/'):
+    input_dir = f'output/color_mask_only/{video_name}/'
+    output_path = f'output/{video_name}_mask_area.csv'
+    no = 0
+    with open(output_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['no', 'red', 'green', 'brown', 'total'])
+        for img_name in list_files_in_directory(input_dir+'red/'):
+            no += 1
+            red_mask_area = find_max_area(input_dir + 'red/' + img_name)
+            green_mask_area = find_max_area(input_dir + 'green/' + img_name)
+            brown_mask_area = find_max_area(input_dir + 'brown/' + img_name)
+            total = red_mask_area + green_mask_area + brown_mask_area
+            writer.writerow([no, red_mask_area, green_mask_area, brown_mask_area, total])
+            if no % 100 == 0:
+                print(f"正在計算{video_name}的第{no}張影像")
+print("done.")
 
 # 資料視覺化，三色面積
 # ---
