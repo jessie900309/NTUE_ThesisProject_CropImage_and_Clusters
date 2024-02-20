@@ -62,44 +62,28 @@
 # print("done.")
 
 
-# 取得影像遮罩
+# 取得影像遮罩並計算最大連通區域的像素數(面積)
 # ---
-# from tool.image_draw_HSVmask import get_HSVcolor_mask
-# from tool.read_directory_files import list_files_in_directory, check_and_create_directory
-# from util.HSV_threshold_sex import *
-# set_color = 'brown'
-# input_dir = 'output/pick_data_/1_6_0_C0210/'
-# output_dir = 'output/color_mask_only/1_6_0_C0210/'+set_color
-# check_and_create_directory(output_dir)
-# for img_name in list_files_in_directory(input_dir):
-#     loop_count = (list_files_in_directory(input_dir)).index(img_name)
-#     if loop_count % 50 == 0:
-#         print(f"正在輸出第{loop_count}張影像")
-#     img_path = input_dir + img_name
-#     get_HSVcolor_mask(image_path=img_path, lower=lower_1B[3], upper=upper_1B[3], output_folder=output_dir)
-# print("done.")
+import csv
+from tool.mask_process import get_max_mask_area
+from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory, get_basename
+from util.constants import upper_red, lower_red, upper_green, lower_green, upper_brown, lower_brown
+input_dir = 'output/frames_500x500_O/0_3_0_C0185/'
 
-
-# 計算最大連通區域的遮罩像素數(面積)
-# ---
-# import csv
-# from tool.mask_process import find_max_area
-# from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory, check_and_create_directory
-# for video_name in list_dirs_in_directory('output/color_mask_only/'):
-#     input_dir = f'output/color_mask_only/{video_name}/'
-#     output_path = f'output/{video_name}_mask_area.csv'
-#     no = 0
-#     with open(output_path, 'w', newline='') as csvfile:
-#         writer = csv.writer(csvfile)
-#         writer.writerow(['no', 'red', 'green', 'brown', 'total'])
-#         for img_name in list_files_in_directory(input_dir+'red/'):
-#             no += 1
-#             red_mask_area = find_max_area(input_dir + 'red/' + img_name)
-#             green_mask_area = find_max_area(input_dir + 'green/' + img_name)
-#             brown_mask_area = find_max_area(input_dir + 'brown/' + img_name)
-#             total = red_mask_area + green_mask_area + brown_mask_area
-#             writer.writerow([no, red_mask_area, green_mask_area, brown_mask_area, total])
-#             if no % 100 == 0:
-#                 print(f"正在計算{video_name}的第{no}張影像")
-# print("done.")
-
+for frame_img in list_dirs_in_directory(input_dir):
+    video_name = get_basename(input_dir)
+    output_path = f'output/{video_name}_mask_area.csv'
+    no = 0
+    with open(output_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(['no', 'red', 'green', 'brown', 'total'])
+        for img_name in list_files_in_directory(input_dir+'red/'):
+            no += 1
+            red_mask_area = get_max_mask_area(frame_img, upper=upper_red, lower=lower_red)
+            green_mask_area = get_max_mask_area(frame_img, upper=upper_green, lower=lower_green)
+            brown_mask_area = get_max_mask_area(frame_img, upper=upper_brown, lower=lower_brown)
+            total = red_mask_area + green_mask_area + brown_mask_area
+            writer.writerow([no, red_mask_area, green_mask_area, brown_mask_area, total])
+            if no % 100 == 0:
+                print(f"正在計算{video_name}的第{no}張影像")
+print("done.")

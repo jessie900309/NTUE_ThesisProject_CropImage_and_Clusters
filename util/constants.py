@@ -31,3 +31,13 @@ video_frame_interval = 4  # 幀(frame)
 # 圖片擷取邊長
 square_width = 500
 
+
+import numpy as np
+
+# 定義閾值
+lower_red = np.array([170, 114, 45])
+upper_red = np.array([180, 218, 112])
+lower_green = np.array([30, 60, 15])
+upper_green = np.array([70, 235, 135])
+lower_brown = np.array([0, 40, 0])
+upper_brown = np.array([180, 85, 65])

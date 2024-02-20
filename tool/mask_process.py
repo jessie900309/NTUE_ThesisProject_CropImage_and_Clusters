@@ -1,55 +1,23 @@
 import cv2
 import numpy as np
-from tool.read_directory_files import get_basename
 
 
-def erode_and_erosion(mask_path, kernel_x, iteration, output_folder):
-    mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-    # kernel：rectangle
-    # kernel = np.ones((kernel_x, kernel_x), np.uint8)
-    # kernel：circle
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_x, kernel_x))
-    # 侵蝕再膨脹
-    erosion = cv2.erode(mask, kernel, iterations=iteration)
-    dilation = cv2.dilate(erosion, kernel, iterations=iteration)
-
-    output_path = output_folder + f"processed_{iteration}_{kernel_x}x{kernel_x}" + get_basename(mask_path)
-    cv2.imwrite(output_path, dilation)
-
-
-# main()：對遮罩侵蝕再膨脹(棄用)
-# ---
-# from tool.mask_process import erode_and_erosion
-# from tool.read_directory_files import list_files_in_directory, check_and_create_directory
-# input_dir = 'output/test_color_mask_only/red/'
-# output_dir = 'output/test_mask_processed/circle/'
-# check_and_create_directory(output_dir)
-# for img_name in list_files_in_directory(input_dir):
-#     loop_count = (list_files_in_directory(input_dir)).index(img_name)
-#     print(f"正在輸出第{loop_count}張影像")
-#     img_path = input_dir + img_name
-#     print(img_path)
-#     erode_and_erosion(mask_path=img_path, kernel_x=5, iteration=2, output_folder=output_dir)
-# print("done.")
-
-
-# def find_max_area(mask_path, output_folder)
-def find_max_area(mask_path):
-    image = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
-
-    # 二值化，將影像轉為黑白
-    _, binary_mask = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
+def get_max_mask_area(image_path, lower, upper):
+    image = cv2.imread(image_path)
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    color_mask = cv2.inRange(hsv_image, lower, upper)
     # 尋找連通區域
-    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(binary_mask)
-    # 找到最大的連通區域的索引
+    num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(color_mask)
     largest_label = np.argmax(stats[1:, cv2.CC_STAT_AREA]) + 1  # 跳過背景
     # 創建一個只包含最大連通區域的遮罩
-    largest_component_mask = np.zeros_like(binary_mask)
+    largest_component_mask = np.zeros_like(color_mask)
     largest_component_mask[labels == largest_label] = 255
-    # 忽略黑色背景，只計算白色像素點
-    result_image = cv2.bitwise_and(image, image, mask=largest_component_mask)
-    # new_mask_path = output_folder + get_basename(mask_path)
-    # cv2.imwrite(new_mask_path, result_image)
-    white_area = cv2.countNonZero(result_image)
+    # 忽略黑色背景，只計算白色像素點 result_image = cv2.bitwise_and(color_mask, color_mask, mask=largest_component_mask)
+    # todo 輸出圖檔後的 countNonZero(cv2.readimg(mask.jpg)) 與 直接計算的 countNonZero(largest_component_mask) 值不相同
+    # countNonZero(cv2.readimg(mask.jpg)) 較大 countNonZero(largest_component_mask) 較小
+    cv2.imwrite("../temp_img.jpg", largest_component_mask)
+    temp_img = cv2.imread("../temp_img.jpg", cv2.IMREAD_GRAYSCALE)
+    white_area = cv2.countNonZero(temp_img)
+
     return white_area
 
