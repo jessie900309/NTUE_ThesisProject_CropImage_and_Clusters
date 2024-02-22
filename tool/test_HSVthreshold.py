@@ -13,7 +13,7 @@ def empty(a):
     return h_min, h_max, s_min, s_max, v_min, v_max
 
 
-path = '../data_testimage/0_4_0_C0222_001.jpg'
+path = '../data_testimage/0_4_0_C0224_001.jpg'
 
 cv2.namedWindow("TrackBars")
 cv2.resizeWindow("TrackBars", 640, 240)

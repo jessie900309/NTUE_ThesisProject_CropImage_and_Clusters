@@ -61,16 +61,15 @@
 # print("done.")
 
 
-# 取得影像遮罩並計算最大連通區域的像素數(面積)
+# 取得三色黏土遮罩像素數(面積)
 # ---
 # import csv
-# from tool.mask_process import get_max_mask_area
-# from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory, get_basename
-# from util.constants import upper_background, lower_background
-# input_dir = 'output/frames_500x500/'
+# from tool.mask_process import get_color_mask_area
+# from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory
+# input_dir = 'output/frames_800x500/'
 #
 # for video_name in list_dirs_in_directory(input_dir):
-#     output_path = f'output/{video_name}_mask_area.csv'
+#     output_path = f'output/frames_row_data/{video_name}_mask_area.csv'
 #     no = 0
 #     with open(output_path, 'w', newline='') as csvfile:
 #         writer = csv.writer(csvfile)
@@ -78,9 +77,10 @@
 #         for img_name in list_files_in_directory(input_dir+video_name):
 #             no += 1
 #             frame_img = input_dir+video_name + '/' + img_name
-#             total_mask_area = get_max_mask_area(frame_img, upper=upper_background, lower=lower_background)
-#             # todo K=3
-#             writer.writerow([no, total_mask_area])
+#             row_data = get_color_mask_area(frame_img)
+#             row_data.insert(0, no)
+#             # print(row_data, "T：", type(row_data))
+#             writer.writerow(row_data)
 #             if no % 100 == 0:
 #                 print(f"正在計算{video_name}的第{no}張影像")
 # print("done.")

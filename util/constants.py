@@ -38,3 +38,7 @@ import numpy as np
 lower_background = np.array([0, 40, 10])
 upper_background = np.array([180, 220, 185])
 
+lower_green = np.array([20, 50, 20])
+upper_green = np.array([70, 220, 185])
+lower_GR = np.array([0, 100, 40])
+upper_GR = np.array([180, 220, 190])

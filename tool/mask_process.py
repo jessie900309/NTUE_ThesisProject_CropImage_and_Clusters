@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 from sklearn.cluster import KMeans
 from tool.read_directory_files import get_basename
+from util.constants import *
 
-
-def get_max_mask_area(input_folder, image_path, lower, upper):
+def get_max_mask_area(image_path, lower, upper):
     image = cv2.imread(image_path)
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     color_mask = cv2.inRange(hsv_image, lower, upper)
@@ -18,11 +18,13 @@ def get_max_mask_area(input_folder, image_path, lower, upper):
     # 忽略黑色背景，只計算白色像素點
     # todo 輸出圖檔後的 countNonZero(cv2.readimg(mask.jpg)) 與 直接計算的 countNonZero(largest_component_mask) 值不相同
     # countNonZero(cv2.readimg(mask.jpg)) 較大 countNonZero(largest_component_mask) 較小
-    cv2.imwrite(f"output/mask/{input_folder}/mask_{get_basename(image_path)}", largest_component_mask)
-    temp_img = cv2.imread(f"output/mask/{input_folder}/mask_{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    # ---
+    cv2.imwrite(f"output/testOuO/mask_{get_basename(image_path)}", largest_component_mask)
+    temp_img = cv2.imread(f"output/testOuO/mask_{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    # ---
     # cv2.imwrite("temp_img.jpg", largest_component_mask)
     # temp_img = cv2.imread("temp_img.jpg", cv2.IMREAD_GRAYSCALE)
-
+    # ---
     white_area = cv2.countNonZero(temp_img)
     return white_area
 
@@ -36,6 +38,36 @@ def get_max_mask_area(input_folder, image_path, lower, upper):
 #     print(frame_img)
 #     mask_area = get_max_mask_area(frame_img, upper=upper_background, lower=lower_background)
 #     print(mask_area)
+
+
+def get_color_mask_area(image_path):
+    image = cv2.imread(image_path)
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # --- get G
+    green_mask = cv2.inRange(hsv_image, lower_green, upper_green)
+    cv2.imwrite("tempG_img.jpg", green_mask)
+    tempG_img = cv2.imread("tempG_img.jpg", cv2.IMREAD_GRAYSCALE)
+    # --- get R
+    green_and_red_mask = cv2.inRange(hsv_image, lower_GR, upper_GR)
+    cv2.imwrite("tempGR_img.jpg", green_and_red_mask)
+    tempGR_img = cv2.imread("tempGR_img.jpg", cv2.IMREAD_GRAYSCALE)
+    R_image = cv2.bitwise_and(tempGR_img, cv2.bitwise_not(tempG_img))
+    cv2.imwrite("tempR_img.jpg", R_image)
+    tempR_img = cv2.imread("tempR_img.jpg", cv2.IMREAD_GRAYSCALE)
+    # --- get B
+    # B_image = cv2.bitwise_and()
+    # ---
+    # cv2.imwrite(f"output/testOuO/mask_{get_basename(image_path)}", color_mask)
+    # temp_img = cv2.imread(f"output/testOuO/mask_{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    # ---
+    # cv2.imwrite("temp_img.jpg", color_mask)
+    # temp_img = cv2.imread("temp_img.jpg", cv2.IMREAD_GRAYSCALE)
+    # ---
+    total_mask_area = get_max_mask_area(image_path, lower_background, upper_background)
+    green_area = cv2.countNonZero(tempG_img)
+    red_area = cv2.countNonZero(tempR_img)
+    brown_area = total_mask_area - green_area - red_area
+    return [total_mask_area, red_area, green_area, brown_area]
 
 
 # 利用分群找三色像素點
