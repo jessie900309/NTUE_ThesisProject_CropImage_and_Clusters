@@ -66,23 +66,22 @@
 # import csv
 # from tool.mask_process import get_max_mask_area
 # from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory, get_basename
-# from util.constants import upper_red, lower_red, upper_green, lower_green, upper_brown, lower_brown
-# input_dir = 'output/frames_500x500_O/0_3_0_C0185/'
+# from util.constants import upper_background, lower_background
+# input_dir = 'output/frames_500x500/'
 #
-# for frame_img in list_dirs_in_directory(input_dir):
-#     video_name = get_basename(input_dir)
+# for video_name in list_dirs_in_directory(input_dir):
 #     output_path = f'output/{video_name}_mask_area.csv'
 #     no = 0
 #     with open(output_path, 'w', newline='') as csvfile:
 #         writer = csv.writer(csvfile)
-#         writer.writerow(['no', 'red', 'green', 'brown', 'total'])
-#         for img_name in list_files_in_directory(input_dir+'red/'):
+#         writer.writerow(['no', 'total_mask_area', 'red_mask_area', 'green_mask_area', 'brown_mask_area'])
+#         for img_name in list_files_in_directory(input_dir+video_name):
 #             no += 1
-#             red_mask_area = get_max_mask_area(frame_img, upper=upper_red, lower=lower_red)
-#             green_mask_area = get_max_mask_area(frame_img, upper=upper_green, lower=lower_green)
-#             brown_mask_area = get_max_mask_area(frame_img, upper=upper_brown, lower=lower_brown)
-#             total = red_mask_area + green_mask_area + brown_mask_area
-#             writer.writerow([no, red_mask_area, green_mask_area, brown_mask_area, total])
+#             frame_img = input_dir+video_name + '/' + img_name
+#             total_mask_area = get_max_mask_area(frame_img, upper=upper_background, lower=lower_background)
+#             # todo K=3
+#             writer.writerow([no, total_mask_area])
 #             if no % 100 == 0:
 #                 print(f"正在計算{video_name}的第{no}張影像")
 # print("done.")
+
