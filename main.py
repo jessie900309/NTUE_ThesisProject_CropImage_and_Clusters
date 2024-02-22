@@ -85,3 +85,30 @@
 #                 print(f"正在計算{video_name}的第{no}張影像")
 # print("done.")
 
+
+# 統計數值資料
+# import csv
+# from tool.get_Ddata import read_csv
+# from tool.read_directory_files import list_files_in_directory
+# input_dir = "datasets/frames_row_data/"
+# output_path = "output/output.csv"
+# with open(output_path, 'w', newline='') as csvfile:
+#     writer = csv.writer(csvfile)
+#     writer.writerow(['sex', 'age', 'stu', 'school', 'video_name',
+#                      'total_avg', 'total_std', 'total_var', 'total_max', 'total_min', 'total_q25', 'total_q50', 'total_q75',
+#                      'red_avg', 'red_std', 'red_var', 'red_max', 'red_min', 'red_q25', 'red_q50', 'red_q75',
+#                      'green_avg', 'green_std', 'green_var', 'green_max', 'green_min', 'green_q25', 'green_q50', 'green_q75',
+#                      'brown_avg', 'brown_std', 'brown_var', 'brown_max', 'brown_min', 'brown_q25', 'brown_q50', 'brown_q75'])
+#     for csv_file in list_files_in_directory(input_dir):
+#         student_info = csv_file.split("_")
+#         sex = student_info[0]
+#         age = student_info[1]
+#         stu = student_info[2]
+#         video_name = csv_file[:-14]
+#         row_data = [sex, age, stu, "TPH_Ruifang", video_name]
+#         csv_path = input_dir + csv_file
+#         clay_info = read_csv(csv_path)
+#         for info in clay_info:
+#             row_data.append(info)
+#         writer.writerow(row_data)
+

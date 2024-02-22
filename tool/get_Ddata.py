@@ -1,26 +1,28 @@
-import os
 import csv
-from util.constants import school_name, data_column
+import numpy as np
 
 
-def get_ddata(dir_path, output_path):
-    all_file_name = os.listdir(dir_path)
-    no = 0
-    # txt to csv
-    with open(output_path, 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile)
-        writer.writerow(data_column)
-        for txt_name in all_file_name:
-            print("read file : {}".format(txt_name))
-            txt_path = dir_path + '/' + txt_name
-            school = school_name[txt_name]
-            with open(txt_path) as f:
-                for line in f:
-                    mp4_file_name = line.rstrip()
-                    data = line.split("_")
-                    sex = data[0]
-                    age = data[1]
-                    stu = data[2]
-                    mp4_file_name = mp4_file_name + ".MP4"
-                    no += 1
-                    writer.writerow([no, sex, age, stu, school, mp4_file_name])
+def read_csv(csv_path):
+    with open(csv_path, 'r') as file:
+        reader = csv.reader(file)
+        header = next(reader)  # 讀取標頭
+        data = np.array([row for row in reader])
+    row_data = []
+    for i, column in enumerate(header):
+        if i == 0:
+            continue
+        column_data_str = data[:, i]
+        column_data = column_data_str.astype(int)
+        # ---
+        average = np.average(column_data) # 平均數
+        std_deviation = np.std(column_data) # 標準差
+        variance = np.var(column_data) # 變異數
+        max_value = np.max(column_data) # 最大值
+        min_value = np.min(column_data) # 最小值
+        quartiles = np.percentile(column_data, [25, 50, 75]) # 第一四分位數、中位數、第三四分位數
+        # ---
+        color_data = [round(average, 4), round(std_deviation, 4), round(variance, 4),
+                      max_value, min_value, quartiles[0], quartiles[1], quartiles[2]]
+        for value in color_data:
+            row_data.append(value)
+    return row_data
