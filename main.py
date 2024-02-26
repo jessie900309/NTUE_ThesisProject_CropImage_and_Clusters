@@ -3,19 +3,19 @@
 # 呼叫函數，將影片中間20秒的 frame 每隔4個 frame 存成圖片檔
 # input: video_dir / output: output_dir
 # ---
-# print("run get_video_frames()")
-# from tool.get_video_frame import get_video_frames
-# from tool.read_directory_files import list_files_in_directory, check_and_create_directory
-# from util.constants import video_duration, video_frame_interval
-# video_dir = 'data_video'
-# output_dir = 'output/frames'
-# check_and_create_directory(output_dir)
-# for video_name in list_files_in_directory(video_dir):
-#     video_path = video_dir + '/' + video_name
-#     output_frame_dir = f'{output_dir}/{video_name[:-4]}'
-#     check_and_create_directory(output_frame_dir)
-#     get_video_frames(video_path=video_path, output_folder=output_frame_dir, duration=video_duration, frame_interval=video_frame_interval)
-# print("done.")
+print("run get_video_frames()")
+from tool.get_video_frame import get_video_frames
+from tool.read_directory_files import list_files_in_directory, check_and_create_directory
+from util.constants import video_duration, video_frame_interval
+video_dir = 'data_video'
+output_dir = 'output/frames'
+check_and_create_directory(output_dir)
+for video_name in list_files_in_directory(video_dir):
+    video_path = video_dir + '/' + video_name
+    output_frame_dir = f'{output_dir}/{video_name[:-4]}'
+    check_and_create_directory(output_frame_dir)
+    get_video_frames(video_path=video_path, output_folder=output_frame_dir, duration=video_duration, frame_interval=video_frame_interval)
+print("done.")
 
 
 # 擷取圖片中間 500x500 另存為圖片
