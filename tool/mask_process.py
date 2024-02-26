@@ -1,10 +1,9 @@
 import cv2
-import numpy as np
 from sklearn.cluster import KMeans
 from tool.read_directory_files import get_basename
 from util.constants import *
 
-def get_max_mask_area(image_path, lower, upper):
+def get_max_mask(image_path, lower, upper):
     image = cv2.imread(image_path)
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     color_mask = cv2.inRange(hsv_image, lower, upper)
@@ -14,30 +13,24 @@ def get_max_mask_area(image_path, lower, upper):
     # 創建一個只包含最大連通區域的遮罩
     largest_component_mask = np.zeros_like(color_mask)
     largest_component_mask[labels == largest_label] = 255
+    # ---
+    return largest_component_mask
+
+
+def get_max_mask_area(image_path, lower, upper):
+    largest_component_mask = get_max_mask(image_path, lower, upper)
 
     # 忽略黑色背景，只計算白色像素點
     # todo 輸出圖檔後的 countNonZero(cv2.readimg(mask.jpg)) 與 直接計算的 countNonZero(largest_component_mask) 值不相同
     # countNonZero(cv2.readimg(mask.jpg)) 較大 countNonZero(largest_component_mask) 較小
+    # cv2.imwrite(f"output/testOuO/tomato_mask/mask_{get_basename(image_path)}", largest_component_mask)
+    # temp_img = cv2.imread(f"output/testOuO/tomato_mask/mask_{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
     # ---
-    cv2.imwrite(f"output/testOuO/mask_{get_basename(image_path)}", largest_component_mask)
-    temp_img = cv2.imread(f"output/testOuO/mask_{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
-    # ---
-    # cv2.imwrite("temp_img.jpg", largest_component_mask)
-    # temp_img = cv2.imread("temp_img.jpg", cv2.IMREAD_GRAYSCALE)
-    # ---
+    cv2.imwrite("output/temp/temp_img.jpg", largest_component_mask)
+    temp_img = cv2.imread("output/temp/temp_img.jpg", cv2.IMREAD_GRAYSCALE)
     white_area = cv2.countNonZero(temp_img)
+    # ---
     return white_area
-
-
-# 測試最大連通區域
-# from tool.mask_process import get_max_mask_area
-# from tool.read_directory_files import list_files_in_directory
-# from util.constants import upper_background, lower_background
-# for test_img in list_files_in_directory('data_testimage/'):
-#     frame_img = 'data_testimage/' + test_img
-#     print(frame_img)
-#     mask_area = get_max_mask_area(frame_img, upper=upper_background, lower=lower_background)
-#     print(mask_area)
 
 
 def get_color_mask_area(image_path):
@@ -45,23 +38,31 @@ def get_color_mask_area(image_path):
     hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     # --- get G
     green_mask = cv2.inRange(hsv_image, lower_green, upper_green)
-    cv2.imwrite("tempG_img.jpg", green_mask)
-    tempG_img = cv2.imread("tempG_img.jpg", cv2.IMREAD_GRAYSCALE)
+    # cv2.imwrite(f"output/testOuO/green_mask/{get_basename(image_path)}", green_mask)
+    # tempG_img = cv2.imread(f"output/testOuO/green_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    cv2.imwrite(f"output/temp/tempG.jpg", green_mask)
+    tempG_img = cv2.imread(f"output/temp/tempG.jpg", cv2.IMREAD_GRAYSCALE)
     # --- get R
     green_and_red_mask = cv2.inRange(hsv_image, lower_GR, upper_GR)
-    cv2.imwrite("tempGR_img.jpg", green_and_red_mask)
-    tempGR_img = cv2.imread("tempGR_img.jpg", cv2.IMREAD_GRAYSCALE)
+    # cv2.imwrite(f"output/testOuO/GR_mask/{get_basename(image_path)}", green_and_red_mask)
+    # tempGR_img = cv2.imread(f"output/testOuO/GR_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    cv2.imwrite(f"output/temp/tempGR.jpg", green_and_red_mask)
+    tempGR_img = cv2.imread(f"output/temp/tempGR.jpg", cv2.IMREAD_GRAYSCALE)
     R_image = cv2.bitwise_and(tempGR_img, cv2.bitwise_not(tempG_img))
-    cv2.imwrite("tempR_img.jpg", R_image)
-    tempR_img = cv2.imread("tempR_img.jpg", cv2.IMREAD_GRAYSCALE)
+    # cv2.imwrite(f"output/testOuO/red_mask/{get_basename(image_path)}", R_image)
+    # tempR_img = cv2.imread(f"output/testOuO/red_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    cv2.imwrite(f"output/temp/tempR.jpg", R_image)
+    tempR_img = cv2.imread(f"output/temp/tempR.jpg", cv2.IMREAD_GRAYSCALE)
+    """
+    # --- get tomato
+    tomato_mask = get_max_mask(hsv_image, lower_background, upper_background)
+    cv2.imwrite(f"output/testOuO/tomato_mask/{get_basename(image_path)}", tomato_mask)
+    tomato_image = cv2.imread(f"output/testOuO/tomato_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
     # --- get B
-    # B_image = cv2.bitwise_and()
-    # ---
-    # cv2.imwrite(f"output/testOuO/mask_{get_basename(image_path)}", color_mask)
-    # temp_img = cv2.imread(f"output/testOuO/mask_{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
-    # ---
-    # cv2.imwrite("temp_img.jpg", color_mask)
-    # temp_img = cv2.imread("temp_img.jpg", cv2.IMREAD_GRAYSCALE)
+    B_image = cv2.bitwise_and(tomato_image, cv2.bitwise_not(tempGR_img))
+    cv2.imwrite(f"output/testOuO/brown_mask/{get_basename(image_path)}", B_image)
+    tempB_img = cv2.imread(f"output/testOuO/brown_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    """
     # ---
     total_mask_area = get_max_mask_area(image_path, lower_background, upper_background)
     green_area = cv2.countNonZero(tempG_img)
@@ -70,7 +71,7 @@ def get_color_mask_area(image_path):
     return [total_mask_area, red_area, green_area, brown_area]
 
 
-# 利用分群找三色像素點
+# 利用分群找三色像素點 -> 效果不佳(R、B同色相)
 def kMeans_clay_pixel(image_path, mask_path):
     # 讀取番茄照片和遮罩
     tomato_image = cv2.imread(image_path)

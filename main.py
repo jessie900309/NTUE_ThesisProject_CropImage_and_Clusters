@@ -47,7 +47,7 @@
 # print("run image_crop_square() EDIT!!!")
 # from tool.image_crop import image_crop_square_edit
 # from tool.read_directory_files import list_files_in_directory, check_and_create_directory, get_basename
-# edit_vid_name = '0_3_0_C0185'
+# edit_vid_name = '0_4_0_C0067'
 # frame_dir = 'output/frames/' + edit_vid_name
 # output_dir = f'output/frames_500x500/{get_basename(frame_dir)}'
 # check_and_create_directory(output_dir)
@@ -66,7 +66,7 @@
 # import csv
 # from tool.mask_process import get_color_mask_area
 # from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory
-# input_dir = 'output/frames_800x500/'
+# input_dir = 'datasets/frames_500x500/'
 #
 # for video_name in list_dirs_in_directory(input_dir):
 #     output_path = f'output/frames_row_data/{video_name}_mask_area.csv'
@@ -111,4 +111,3 @@
 #         for info in clay_info:
 #             row_data.append(info)
 #         writer.writerow(row_data)
-
