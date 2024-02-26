@@ -34,11 +34,27 @@ square_width = 500
 
 import numpy as np
 
-# 定義作品背景閾值
+# 定義作品色彩閾值 - TPH_Ruifang
+# lower_background = np.array([0, 40, 10])
+# upper_background = np.array([180, 220, 185])
+# lower_green = np.array([20, 50, 20])
+# upper_green = np.array([70, 220, 185])
+# lower_GR = np.array([0, 100, 40])
+# upper_GR = np.array([180, 220, 190])
+
+# 定義作品色彩閾值 - TPH_Tamsui
 lower_background = np.array([0, 40, 10])
 upper_background = np.array([180, 220, 185])
-
 lower_green = np.array([20, 50, 20])
 upper_green = np.array([70, 220, 185])
 lower_GR = np.array([0, 100, 40])
 upper_GR = np.array([180, 220, 190])
+
+# 定義作品色彩閾值 - TYC_Dongmen
+# lower_background = np.array([0, 40, 10])
+# upper_background = np.array([180, 220, 185])
+# lower_green = np.array([20, 50, 20])
+# upper_green = np.array([70, 220, 185])
+# lower_GR = np.array([0, 100, 40])
+# upper_GR = np.array([180, 220, 190])
+
