@@ -31,13 +31,15 @@ def get_video_frames(video_path, output_folder, duration=10, frame_interval=10):
 
         # 只擷取指定時間範圍的 frame，並以指定間隔取樣
         if (start_frame <= frame_count) and (frame_count <= end_frame) and (frame_count % frame_interval == 0):
-            output_file_path = f'{output_folder}/{file_name}_frame_{frame_count}.jpg'
+            output_file_path = f'{output_folder}/{file_name}_frame_{frame_count:05d}.jpg'
             cv2.imwrite(output_file_path, frame)
             output_frame_count += 1
-            if output_frame_count % 10 == 0:
-                print(f"正在輸出第{output_frame_count}張frame: {output_file_path}")
+            if output_frame_count % 50 == 0:
+                print(f"正在輸出第{output_frame_count:03d}張frame: {output_file_path}")
 
         frame_count += 1
+        if output_frame_count >= 600:
+            break
 
     # 釋放資源
     cap.release()

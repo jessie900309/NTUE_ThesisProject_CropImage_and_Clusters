@@ -3,19 +3,28 @@
 # 呼叫函數，將影片中間20秒的 frame 每隔4個 frame 存成圖片檔
 # input: video_dir / output: output_dir
 # ---
-print("run get_video_frames()")
-from tool.get_video_frame import get_video_frames
-from tool.read_directory_files import list_files_in_directory, check_and_create_directory
-from util.constants import video_duration, video_frame_interval
-video_dir = 'data_video'
-output_dir = 'output/frames'
-check_and_create_directory(output_dir)
-for video_name in list_files_in_directory(video_dir):
-    video_path = video_dir + '/' + video_name
-    output_frame_dir = f'{output_dir}/{video_name[:-4]}'
-    check_and_create_directory(output_frame_dir)
-    get_video_frames(video_path=video_path, output_folder=output_frame_dir, duration=video_duration, frame_interval=video_frame_interval)
-print("done.")
+# print("run get_video_frames()")
+# from tool.get_video_frame import get_video_frames
+# from tool.read_directory_files import list_files_in_directory, check_and_create_directory
+# from util.constants import video_duration, video_frame_interval
+# video_dir = 'data_video'
+# output_dir = 'output/frames'
+# check_and_create_directory(output_dir)
+# for video_name in list_files_in_directory(video_dir):
+#     video_path = video_dir + '/' + video_name
+#     output_frame_dir = f'{output_dir}/{video_name[:-4]}'
+#     check_and_create_directory(output_frame_dir)
+#     get_video_frames(video_path=video_path, output_folder=output_frame_dir, duration=video_duration, frame_interval=video_frame_interval)
+# print("done.")
+
+
+# from os.path import basename
+# import shutil
+# from tool.read_directory_files import list_dirs_in_directory
+# for video_name in list_dirs_in_directory('datasets/datasets_TPH_Ruifang/frames_800x500/'):
+#     src = 'datasets/datasets_TPH_Ruifang/frames_800x500/' + video_name + '/' + video_name + '_001.jpg'
+#     shutil.copyfile(src, 'data_testimage/data_testimage_TPH_Ruifang/'+basename(src))
+#     print("CP : ", src)
 
 
 # 擷取圖片中間 500x500 另存為圖片
@@ -35,8 +44,8 @@ print("done.")
 #         frame_path = frame_dir + '/' + frame_name
 #         output_cropped_path = f'{output_dir}/{vid_name}_{loop_count+1:03d}.jpg'
 #         image_crop_square(image_path=frame_path, output_path=output_cropped_path, pixel=square_width)
-#         if loop_count % 10 == 0:
-#             print(f"正在輸出第{loop_count}張frame: {output_cropped_path}")
+#         if loop_count % 50 == 0:
+#             print(f"正在輸出第{loop_count:03d}張frame: {output_cropped_path}")
 # print("done.")
 
 
@@ -47,7 +56,7 @@ print("done.")
 # print("run image_crop_square() EDIT!!!")
 # from tool.image_crop import image_crop_square_edit
 # from tool.read_directory_files import list_files_in_directory, check_and_create_directory, get_basename
-# edit_vid_name = '0_4_0_C0067'
+# edit_vid_name = "1_5_0_C0195"
 # frame_dir = 'output/frames/' + edit_vid_name
 # output_dir = f'output/frames_500x500/{get_basename(frame_dir)}'
 # check_and_create_directory(output_dir)
@@ -56,8 +65,8 @@ print("done.")
 #     frame_path = frame_dir + '/' + frame_name
 #     output_cropped_path = f'{output_dir}/{edit_vid_name}_{loop_count+1:03d}.jpg'
 #     image_crop_square_edit(image_path=frame_path, output_path=output_cropped_path)
-#     if loop_count % 10 == 0:
-#         print(f"正在輸出第{loop_count}張frame: {output_cropped_path}")
+#     if loop_count % 50 == 0:
+#         print(f"正在輸出第{loop_count:03d}張frame: {output_cropped_path}")
 # print("done.")
 
 
@@ -66,7 +75,7 @@ print("done.")
 # import csv
 # from tool.mask_process import get_color_mask_area
 # from tool.read_directory_files import list_dirs_in_directory, list_files_in_directory
-# input_dir = 'datasets/frames_500x500/'
+# input_dir = 'datasets/datasets_TPH_Ruifang/'
 #
 # for video_name in list_dirs_in_directory(input_dir):
 #     output_path = f'output/frames_row_data/{video_name}_mask_area.csv'
@@ -90,7 +99,7 @@ print("done.")
 # import csv
 # from tool.get_Ddata import read_csv
 # from tool.read_directory_files import list_files_in_directory
-# input_dir = "datasets/frames_row_data/"
+# input_dir = "output/frames_row_data/"
 # output_path = "output/output.csv"
 # with open(output_path, 'w', newline='') as csvfile:
 #     writer = csv.writer(csvfile)
