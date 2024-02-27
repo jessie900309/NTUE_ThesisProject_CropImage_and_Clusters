@@ -24,9 +24,9 @@ def image_crop_square_edit(image_path, output_path):
     height, width, _ = image.shape
 
     # 定義擷取區域
-    top_left_x = int((width - 500) / 2) + 40
+    top_left_x = int((width - 500) / 2) - 150
     top_left_y = height - 500 - 80
-    bottom_right_x = top_left_x + 500
+    bottom_right_x = top_left_x + 500 + 300
     bottom_right_y = height - 80
     # print('top_left_x : ', top_left_x)
     # print('top_left_y : ', top_left_y)

@@ -7,7 +7,7 @@
 # from tool.get_video_frame import get_video_frames
 # from tool.read_directory_files import list_files_in_directory, check_and_create_directory
 # from util.constants import video_duration, video_frame_interval
-# video_dir = 'data_video'
+# video_dir = 'data_video/'
 # output_dir = 'output/frames'
 # check_and_create_directory(output_dir)
 # for video_name in list_files_in_directory(video_dir):
@@ -16,15 +16,6 @@
 #     check_and_create_directory(output_frame_dir)
 #     get_video_frames(video_path=video_path, output_folder=output_frame_dir, duration=video_duration, frame_interval=video_frame_interval)
 # print("done.")
-
-
-# from os.path import basename
-# import shutil
-# from tool.read_directory_files import list_dirs_in_directory
-# for video_name in list_dirs_in_directory('datasets/datasets_TPH_Ruifang/frames_800x500/'):
-#     src = 'datasets/datasets_TPH_Ruifang/frames_800x500/' + video_name + '/' + video_name + '_001.jpg'
-#     shutil.copyfile(src, 'data_testimage/data_testimage_TPH_Ruifang/'+basename(src))
-#     print("CP : ", src)
 
 
 # 擷取圖片中間 500x500 另存為圖片
@@ -56,7 +47,7 @@
 # print("run image_crop_square() EDIT!!!")
 # from tool.image_crop import image_crop_square_edit
 # from tool.read_directory_files import list_files_in_directory, check_and_create_directory, get_basename
-# edit_vid_name = "1_5_0_C0195"
+# edit_vid_name = "0_6_0_C0154"
 # frame_dir = 'output/frames/' + edit_vid_name
 # output_dir = f'output/frames_500x500/{get_basename(frame_dir)}'
 # check_and_create_directory(output_dir)
