@@ -71,6 +71,46 @@ def get_color_mask_area(image_path):
     return [total_mask_area, red_area, green_area, brown_area]
 
 
+def get_color_mask_area_and_mask_image(image_path):
+    image = cv2.imread(image_path)
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # --- get G
+    green_mask = cv2.inRange(hsv_image, lower_green, upper_green)
+    cv2.imwrite(f"output/testOuO/green_mask/{get_basename(image_path)}", green_mask)
+    tempG_img = cv2.imread(f"output/testOuO/green_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    # --- get R
+    green_and_red_mask = cv2.inRange(hsv_image, lower_GR, upper_GR)
+    cv2.imwrite(f"output/testOuO/GR_mask/{get_basename(image_path)}", green_and_red_mask)
+    tempGR_img = cv2.imread(f"output/testOuO/GR_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    R_image = cv2.bitwise_and(tempGR_img, cv2.bitwise_not(tempG_img))
+    cv2.imwrite(f"output/testOuO/red_mask/{get_basename(image_path)}", R_image)
+    tempR_img = cv2.imread(f"output/testOuO/red_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    # --- get tomato
+    tomato_mask = get_max_mask(image_path, lower_background, upper_background)
+    cv2.imwrite(f"output/testOuO/tomato_mask/{get_basename(image_path)}", tomato_mask)
+    tomato_image = cv2.imread(f"output/testOuO/tomato_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    # --- get B
+    B_image = cv2.bitwise_and(tomato_image, cv2.bitwise_not(tempGR_img))
+    cv2.imwrite(f"output/testOuO/brown_mask/{get_basename(image_path)}", B_image)
+    # tempB_img = cv2.imread(f"output/testOuO/brown_mask/{get_basename(image_path)}", cv2.IMREAD_GRAYSCALE)
+    # ---
+    total_mask_area = get_max_mask_area(image_path, lower_background, upper_background)
+    green_area = cv2.countNonZero(tempG_img)
+    red_area = cv2.countNonZero(tempR_img)
+    brown_area = total_mask_area - green_area - red_area
+    return [total_mask_area, red_area, green_area, brown_area]
+
+
+# --- 測試遮罩
+# from tool.mask_process import get_color_mask_area_and_mask_image
+# from tool.read_directory_files import list_files_in_directory
+# for img_name in list_files_in_directory("data_testimage/data_testimage_TPH_Ruifang/"):
+#     frame_path = "data_testimage/data_testimage_TPH_Ruifang/" + img_name
+#     area = get_color_mask_area_and_mask_image(frame_path)
+#     print(area)
+# print("done.")
+
+
 # 利用分群找三色像素點 -> 效果不佳(R、B同色相)
 def kMeans_clay_pixel(image_path, mask_path):
     # 讀取番茄照片和遮罩
@@ -111,10 +151,10 @@ def kMeans_clay_pixel(image_path, mask_path):
 
     # 重新組合分群結果示意圖
     cluster_image = real_centers[real_labels].reshape(masked_image.shape).astype(np.uint8)
-    cv2.imwrite("../cluster_image.jpg", cluster_image)
+    cv2.imwrite("../output/testOuO/cluster_image.jpg", cluster_image)
 
     return cluster_image
 
 
-# 測試kMeans分群對色塊分析效果
-# kMeans_clay_pixel(image_path="../data_testimage/0_3_0_C0185_001.jpg", mask_path="../output/testOuO/0_3_0_C0185_001.jpg")
+# --- 測試kMeans分群對色塊分析效果
+# kMeans_clay_pixel(image_path="../data_testimage/data_testimage_TPH_Ruifang/0_3_0_C0185_001.jpg", mask_path="../output/testOuO/tomato_mask/0_3_0_C0185_001.jpg")
